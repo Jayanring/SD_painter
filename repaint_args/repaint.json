@@ -1,0 +1,36 @@
+{
+    "anime": {
+        "checkpoint": "flat2DAnimerge_v30.safetensors [423dc55b3f]",
+        "args": {
+            "prompt": "(best-quality:0.8), (best-quality:0.8), HDR, (smooth skin:1.2), (young:1.2)",
+            "negative_prompt": "NSFW, (worst quality:2), (low quality:2), (normal quality:2), ((monochrome)), ((grayscale)), skin spots, skin blemishes, (wrinkle:1.3), agespot, (ugly:1.3), (duplicate:1.3), (morbid:1.21), (mutilated:1.21), mutated hands, (poorly drawn hands:1.3), blurry, (bad anatomy:1.21), (bad proportions:1.3), extra limbs, (disfigured:1.3), (missing arms:1.3), (extra legs:1.3), (fused fingers:1.3), (too many fingers:1.3), (unclear eyes:1.3), lowers, missing fingers, extra digit, missing fingers, ((extra arms and legs)), deepnegative, verybadimagenegative_v1.3, (nevus:1.2)",
+            "batch_size": 1,
+            "steps": 30,
+            "sampler_index": "Euler a",
+            "cfg_scale": 7,
+            "seed": -1,
+            "alwayson_scripts": {
+                "controlnet": {
+                    "args": [
+                        {
+                            "input_image": "",
+                            "module": "lineart_realistic",
+                            "pixel_perfect": true,
+                            "model": "control_v11p_sd15_lineart [43d4be0d]",
+                            "weight": 1.5,
+                            "control_mode": 2
+                        },
+                        {
+                            "input_image": "",
+                            "module": "depth_leres++",
+                            "pixel_perfect": true,
+                            "model": "control_v11f1p_sd15_depth [cfd03158]",
+                            "weight": 0.9,
+                            "control_mode": 0
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
