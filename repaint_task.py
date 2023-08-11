@@ -20,7 +20,6 @@ class RepaintTask(object):
             mode + style + encoded_image[:10] + str(time.time()))
 
     # just for test
-
     def rename_task(self):
         self._task_id += '_' + self._mode
         return self
@@ -29,6 +28,16 @@ class RepaintTask(object):
         with open(f'repaint_args/repaint.json', 'r') as file:
             config = json.load(file)
             return config[self._style]
+
+    def interrogate(self, args):
+        prompt = sd_api.interrogate(self._encoded_image)
+        args['prompt'] += prompt
+        return args
+
+    def fill_controlnet_input_image(self, args):
+        for controlnet_args in args['alwayson_scripts']['controlnet']['args']:
+            controlnet_args['input_image'] = self._encoded_image
+        return args
 
     def inpaint(self, input_image, repaint_image):
         return repaint_image
@@ -46,15 +55,13 @@ class RepaintTask(object):
         args['height'] = target_height
 
         # interrogate prompt
-        prompt = sd_api.interrogate(self._encoded_image)
-        args['prompt'] += prompt
+        args = self.interrogate(args)
 
         # print args
         app.logger.info(f'repaint args: {args}')
 
         # input image to controlnet
-        for controlnet_args in args['alwayson_scripts']['controlnet']['args']:
-            controlnet_args['input_image'] = self._encoded_image
+        args = self.fill_controlnet_input_image(args)
 
         # repaint
         repaint_image, pnginfo = sd_api.txt2img(args)
@@ -68,9 +75,27 @@ class RepaintTask(object):
         return image, pnginfo
 
 
+class ReferenceRepaintTask(RepaintTask):
+    def interrogate(self, args):
+        return args
+
+    def fill_controlnet_input_image(self, args):
+        for controlnet_args in args['alwayson_scripts']['controlnet']['args']:
+            if controlnet_args['module'] == 'reference_only' or controlnet_args['module'] == 'shuffle':
+                controlnet_args['input_image'] = util.file_to_base64(
+                    'reference_images/' + self._style + '.png')
+            else:
+                controlnet_args['input_image'] = self._encoded_image
+        return args
+
+
 if __name__ == '__main__':
     path = f'scripts/merge_test/person.png'
     encoded_image = util.file_to_base64(path)
 
     task = RepaintTask('repaint', 'anime', encoded_image).rename_task()
+    task.process()
+
+    task = ReferenceRepaintTask(
+        'reference_repaint', 'shuimo', encoded_image).rename_task()
     task.process()
