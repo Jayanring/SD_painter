@@ -145,12 +145,12 @@ class MergeTask(object):
 
 class MergeBuiltinTask(MergeTask):
     def get_background(self):
-        return Image.open('merge_args/' + self._style + '.png')
+        return Image.open('args/merge_args/' + self._style + '.png')
 
 
 class MergeBuiltinRepaintTask(MergeBuiltinTask):
     def get_repaint_style(self):
-        with open(f'merge_args/style_map.json', 'r') as file:
+        with open(f'args/merge_args/style_map.json', 'r') as file:
             config = json.load(file)
             return config[self._style]
 
@@ -179,21 +179,22 @@ class MergeRepaintBothTask(MergeRepaintPersonTask, MergeRepaintBackgroundTask):
 
 
 if __name__ == '__main__':
-    path = f'scripts/merge_test/person.png'
+    path = f'test/person.png'
     encoded_person = util.file_to_base64(path)
-    background_path = f'scripts/merge_test/background.jpg'
+
+    task = MergeBuiltinTask('merge_builtin', 'xihu',
+                            encoded_person).rename_task()
+    task.process()
+
+    task = MergeBuiltinRepaintTask(
+        'merge_builtin_repaint', 'xihu', encoded_person).rename_task()
+    task.process()
+
+    background_path = f'test/background.png'
     encoded_background = util.file_to_base64(background_path)
 
     task = MergeTask('merge', '', encoded_person,
                      encoded_background).rename_task()
-    task.process()
-
-    task = MergeBuiltinTask('merge_builtin', 'xihu',
-                            encoded_person, encoded_background).rename_task()
-    task.process()
-
-    task = MergeBuiltinRepaintTask(
-        'merge_builtin_repaint', 'xihu', encoded_person, encoded_background).rename_task()
     task.process()
 
     task = MergeRepaintPersonTask(

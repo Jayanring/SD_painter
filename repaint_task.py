@@ -25,7 +25,7 @@ class RepaintTask(object):
         return self
 
     def get_repaint_config(self):
-        with open(f'repaint_args/repaint.json', 'r') as file:
+        with open(f'args/repaint_args/repaint.json', 'r') as file:
             config = json.load(file)
             return config[self._style]
 
@@ -58,7 +58,7 @@ class RepaintTask(object):
         args = self.interrogate(args)
 
         # print args
-        app.logger.info(f'repaint args: {args}')
+        print(f'repaint args: {args}')
 
         # input image to controlnet
         args = self.fill_controlnet_input_image(args)
@@ -75,27 +75,9 @@ class RepaintTask(object):
         return image, pnginfo
 
 
-class ReferenceRepaintTask(RepaintTask):
-    def interrogate(self, args):
-        return args
-
-    def fill_controlnet_input_image(self, args):
-        for controlnet_args in args['alwayson_scripts']['controlnet']['args']:
-            if controlnet_args['module'] == 'reference_only' or controlnet_args['module'] == 'shuffle':
-                controlnet_args['input_image'] = util.file_to_base64(
-                    'reference_images/' + self._style + '.png')
-            else:
-                controlnet_args['input_image'] = self._encoded_image
-        return args
-
-
 if __name__ == '__main__':
-    path = f'scripts/merge_test/person.png'
+    path = f'test/person.png'
     encoded_image = util.file_to_base64(path)
 
     task = RepaintTask('repaint', 'anime', encoded_image).rename_task()
-    task.process()
-
-    task = ReferenceRepaintTask(
-        'reference_repaint', 'shuimo', encoded_image).rename_task()
     task.process()

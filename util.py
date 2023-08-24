@@ -27,7 +27,7 @@ def file_to_base64(path):
     return encoded_image
 
 
-def base64_to_file(encoded_image, file_name, save_dir='history_outputs', pnginfo=None):
+def base64_to_file(encoded_image, file_name, save_dir='outputs', pnginfo=None):
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 
@@ -35,7 +35,7 @@ def base64_to_file(encoded_image, file_name, save_dir='history_outputs', pnginfo
     image_to_file(image, file_name, save_dir, pnginfo)
 
 
-def image_to_file(image, file_name, save_dir='history_outputs', pnginfo=None):
+def image_to_file(image, file_name, save_dir='outputs', pnginfo=None):
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 
@@ -65,7 +65,7 @@ def insert_to_background(background: Image.Image, person: Image.Image, position=
 
 
 def get_history_seq():
-    save_dir = 'history_outputs'
+    save_dir = 'outputs'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 

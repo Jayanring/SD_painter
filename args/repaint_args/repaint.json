@@ -56,20 +56,13 @@
                         },
                         {
                             "input_image": "",
-                            "module": "reference_only",
+                            "module": "depth_leres++",
                             "pixel_perfect": true,
-                            "model": "None",
-                            "weight": 1.5,
-                            "control_mode": 2
-                        },
-                        {
-                            "input_image": "",
-                            "module": "shuffle",
-                            "pixel_perfect": true,
-                            "model": "control_v11e_sd15_shuffle [526bfdae]",
-                            "weight": 1,
+                            "model": "control_v11f1p_sd15_depth [cfd03158]",
+                            "weight": 0.9,
                             "control_mode": 0
                         }
+                        
                     ]
                 }
             }
