@@ -1,6 +1,7 @@
 import requests
 import util
 import time
+import os
 import logging
 
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
@@ -11,6 +12,12 @@ if __name__ == '__main__':
     logging.info(f'sd_url: {util.sd_url()}')
     logging.info(f'get_task_url: {util.get_task_url()}')
     logging.info(f'submit_task_url: {util.submit_task_url()}')
+
+    # check
+    if not os.path.exists('args/') or not os.path.exists('outputs/') or not os.path.exists('.env'):
+        raise Exception('miss mount file')
+
+
     while True:
         try:
             task_list = requests.get(util.get_task_url()).json()

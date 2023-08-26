@@ -25,8 +25,8 @@ class RepaintTask(object):
             return config[self._style]
 
     def interrogate(self, args):
-        # prompt = sd_api.interrogate(self._encoded_image)
-        # args['prompt'] += prompt
+        prompt = sd_api.interrogate(self._encoded_image)
+        args['prompt'] += prompt
         return args
 
     def fill_controlnet_input_image(self, args):
