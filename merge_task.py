@@ -8,14 +8,6 @@ from PIL import Image
 # merge two images, one provides person, one provides background
 
 
-def get_merge_background_pixel_sum():
-    return int(os.environ.get('MERGE_BACKGROUND_PIXEL_SUM'))
-
-
-def get_merge_person_ratio():
-    return float(os.environ.get('MERGE_PERSON_RATIO'))
-
-
 def trim_seg(input_image):
     if input_image.mode in ('RGBA', 'LA'):
         # 获取图像的宽度和高度
@@ -57,7 +49,7 @@ def trim_seg(input_image):
 
 
 def adjust_person_size(background: Image.Image, person: Image.Image):
-    ratio = get_merge_person_ratio()
+    ratio = util.get_merge_person_ratio()
 
     b_width, b_height = background.size
     p_width, p_height = person.size
@@ -98,14 +90,14 @@ class MergeTask(object):
     def repaint(self, encoded_image, is_background):
         if is_background:
             repaint_task = RepaintTask('repaint', self.get_repaint_style(
-            ), encoded_image, get_merge_background_pixel_sum())
+            ), encoded_image, util.get_merge_background_pixel_sum())
             repaint_task._task_id = self._task_id + '_repaint_background'
         else:
             repaint_task = RepaintTask(
                 'repaint', self.get_repaint_style(), encoded_image)
             repaint_task._task_id = self._task_id + '_repaint_person'
-        image, _ = repaint_task.process()
-        return image
+        encoded_image = repaint_task.process()
+        return util.base64_to_image(encoded_image)
 
     def process_person(self):
         return util.base64_to_image(self._person_encoded)
@@ -141,6 +133,8 @@ class MergeTask(object):
 
         # save
         util.image_to_file(inserted_person, self._task_id)
+
+        return util.image_to_base64(inserted_person)
 
 
 class MergeBuiltinTask(MergeTask):

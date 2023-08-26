@@ -49,7 +49,7 @@
                         {
                             "input_image": "",
                             "module": "lineart_realistic",
-                            "pixel_perfect": true,
+                            "processor_res": 512,
                             "model": "control_v11p_sd15_lineart [43d4be0d]",
                             "weight": 1.3,
                             "control_mode": 2
@@ -57,7 +57,7 @@
                         {
                             "input_image": "",
                             "module": "depth_leres++",
-                            "pixel_perfect": true,
+                            "processor_res": 512,
                             "model": "control_v11f1p_sd15_depth [cfd03158]",
                             "weight": 0.9,
                             "control_mode": 0

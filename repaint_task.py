@@ -2,16 +2,11 @@ import util
 import sd_api
 import time
 import json
-import os
-from main import app
-
-
-def get_repaint_pixel_sum():
-    return int(os.environ.get('REPAINT_PIXEL_SUM'))
+import logging
 
 
 class RepaintTask(object):
-    def __init__(self, mode, style, encoded_image, pixel_sum=get_repaint_pixel_sum()):
+    def __init__(self, mode, style, encoded_image, pixel_sum=util.get_repaint_pixel_sum()):
         self._mode = mode
         self._style = style
         self._encoded_image = encoded_image
@@ -30,8 +25,8 @@ class RepaintTask(object):
             return config[self._style]
 
     def interrogate(self, args):
-        prompt = sd_api.interrogate(self._encoded_image)
-        args['prompt'] += prompt
+        # prompt = sd_api.interrogate(self._encoded_image)
+        # args['prompt'] += prompt
         return args
 
     def fill_controlnet_input_image(self, args):
@@ -58,21 +53,22 @@ class RepaintTask(object):
         args = self.interrogate(args)
 
         # print args
-        print(f'repaint args: {args}')
+        logging.info(f'{self._task_id} repaint args:\n{args}')
 
         # input image to controlnet
         args = self.fill_controlnet_input_image(args)
 
         # repaint
-        repaint_image, pnginfo = sd_api.txt2img(args)
+        encoded_repaint_image, pnginfo = sd_api.txt2img(args)
 
         # inpaint
-        image = self.inpaint(input_image, repaint_image)
+        image = self.inpaint(
+            input_image, util.base64_to_image(encoded_repaint_image))
 
         # save
         util.image_to_file(image, self._task_id, pnginfo=pnginfo)
 
-        return image, pnginfo
+        return encoded_repaint_image
 
 
 if __name__ == '__main__':
