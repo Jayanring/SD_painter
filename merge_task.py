@@ -9,7 +9,7 @@ from PIL import Image
 
 
 def trim_seg(input_image):
-    if input_image.mode in ('RGBA', 'LA'):
+    if input_image.mode in ("RGBA", "LA"):
         # 获取图像的宽度和高度
         width, height = input_image.size
 
@@ -43,7 +43,8 @@ def trim_seg(input_image):
 
         # 裁剪图像，去掉 alpha 通道全为 0 的行和列
         output_image = input_image.crop(
-            (left_bound, top_bound, right_bound + 1, bottom_bound + 1))
+            (left_bound, top_bound, right_bound + 1, bottom_bound + 1)
+        )
 
         return output_image
 
@@ -64,8 +65,7 @@ def adjust_person_size(background: Image.Image, person: Image.Image):
         target_height = int(b_height * ratio)
         target_width = int(target_height / p_height * p_width)
 
-    resized_person = person.resize(
-        (target_width, target_height), Image.LANCZOS)
+    resized_person = person.resize((target_width, target_height), Image.LANCZOS)
 
     return resized_person, int(0.5 * (b_width - target_width)), b_height - target_height
 
@@ -77,11 +77,12 @@ class MergeTask(object):
         self._person_encoded = person_encoded
         self._background_encoded = background_encoded
         self._task_id = util.calculate_md5(
-            mode + style + person_encoded[:10] + str(time.time()))
+            mode + style + person_encoded[:10] + str(time.time())
+        )
 
     # just for test
     def rename_task(self):
-        self._task_id += '_' + self._mode
+        self._task_id += "_" + self._mode
         return self
 
     def get_repaint_style(self):
@@ -89,13 +90,18 @@ class MergeTask(object):
 
     def repaint(self, encoded_image, is_background):
         if is_background:
-            repaint_task = RepaintTask('repaint', self.get_repaint_style(
-            ), encoded_image, util.get_merge_background_pixel_sum())
-            repaint_task._task_id = self._task_id + '_repaint_background'
+            repaint_task = RepaintTask(
+                "repaint",
+                self.get_repaint_style(),
+                encoded_image,
+                util.get_merge_background_pixel_sum(),
+            )
+            repaint_task._task_id = self._task_id + "_repaint_background"
         else:
             repaint_task = RepaintTask(
-                'repaint', self.get_repaint_style(), encoded_image)
-            repaint_task._task_id = self._task_id + '_repaint_person'
+                "repaint", self.get_repaint_style(), encoded_image
+            )
+            repaint_task._task_id = self._task_id + "_repaint_person"
         encoded_image = repaint_task.process()
         return util.base64_to_image(encoded_image)
 
@@ -127,7 +133,8 @@ class MergeTask(object):
 
         # insert
         inserted_person = util.insert_to_background(
-            background, resized_person_seg, (x, y))
+            background, resized_person_seg, (x, y)
+        )
 
         # todo: img2img to smooth the edge
 
@@ -139,12 +146,12 @@ class MergeTask(object):
 
 class MergeBuiltinTask(MergeTask):
     def get_background(self):
-        return Image.open('args/merge_args/' + self._style + '.png')
+        return Image.open("args/merge_args/" + self._style + ".png")
 
 
 class MergeBuiltinRepaintTask(MergeBuiltinTask):
     def get_repaint_style(self):
-        with open(f'args/merge_args/style_map.json', 'r') as file:
+        with open(f"args/merge_args/style_map.json", "r") as file:
             config = json.load(file)
             return config[self._style]
 
@@ -172,33 +179,35 @@ class MergeRepaintBothTask(MergeRepaintPersonTask, MergeRepaintBackgroundTask):
     pass
 
 
-if __name__ == '__main__':
-    path = f'test/person.png'
+if __name__ == "__main__":
+    path = f"test/person.png"
     encoded_person = util.file_to_base64(path)
 
-    task = MergeBuiltinTask('merge_builtin', 'xihu',
-                            encoded_person).rename_task()
+    task = MergeBuiltinTask("merge_builtin", "xihu", encoded_person).rename_task()
     task.process()
 
     task = MergeBuiltinRepaintTask(
-        'merge_builtin_repaint', 'xihu', encoded_person).rename_task()
+        "merge_builtin_repaint", "xihu", encoded_person
+    ).rename_task()
     task.process()
 
-    background_path = f'test/background.png'
+    background_path = f"test/background.png"
     encoded_background = util.file_to_base64(background_path)
 
-    task = MergeTask('merge', '', encoded_person,
-                     encoded_background).rename_task()
+    task = MergeTask("merge", "", encoded_person, encoded_background).rename_task()
     task.process()
 
     task = MergeRepaintPersonTask(
-        'merge_repaint_person', 'anime', encoded_person, encoded_background).rename_task()
+        "merge_repaint_person", "anime", encoded_person, encoded_background
+    ).rename_task()
     task.process()
 
     task = MergeRepaintBackgroundTask(
-        'merge_repaint_background', 'anime', encoded_person, encoded_background).rename_task()
+        "merge_repaint_background", "anime", encoded_person, encoded_background
+    ).rename_task()
     task.process()
 
     task = MergeRepaintBothTask(
-        'merge_repaint_both', 'anime', encoded_person, encoded_background).rename_task()
+        "merge_repaint_both", "anime", encoded_person, encoded_background
+    ).rename_task()
     task.process()
