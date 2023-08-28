@@ -57,5 +57,3 @@ if __name__ == '__main__':
                     util.submit_task_url(), json=submit_payload)
                 logging.info(
                     f'submit {task._task_id} error: {result.json()}\n')
-
-        break

@@ -1,4 +1,4 @@
-outputs
+outputs/*
 .env
 scripts/
 __pycache__
