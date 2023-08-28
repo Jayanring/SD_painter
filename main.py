@@ -29,17 +29,17 @@ if __name__ == "__main__":
         try:
             task_list = requests.get(util.get_task_url()).json()
         except Exception as e:
-            logging.warn(f"get task failed: {e}")
+            logging.warning(f"get task failed: {e}")
             time.sleep(10)
             continue
 
         if task_list["message"] != "success":
-            logging.warn(f"get invalid task")
+            logging.warning(f"get invalid task")
             time.sleep(5)
             continue
 
         if "data" not in task_list:
-            logging.warn(f"task no data")
+            logging.warning(f"task no data")
             time.sleep(1)
             continue
 
@@ -61,7 +61,7 @@ if __name__ == "__main__":
                 result = requests.post(util.submit_task_url(), json=submit_payload)
                 logging.info(f"submit {task._task_id}: {result.json()}\n")
             except Exception as e:
-                logging.warn(f"process failed: {e}")
+                logging.warning(f"process failed: {e}")
                 submit_payload = {
                     "errorMessage": f"{e}",
                     "fileName": "",
