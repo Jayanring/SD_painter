@@ -41,6 +41,11 @@ def cal_size(sum, image):
     return int(math.sqrt(sum * width / height)), int(math.sqrt(sum * height / width))
 
 
+def split_pixel(pixel: str):
+    l = pixel.split("*")
+    return int(l[0]), int(l[1])
+
+
 def file_to_base64(path):
     img = cv2.imread(path)
     _, bytes = cv2.imencode(".png", img)
@@ -119,29 +124,32 @@ def args_to_task(task_args):
     style = task_args["style"]
     pixel = task_args["pixel"]
     if mode == "RepaintTask":
-        logging.info(f"get RepaintTask: style: {style}, id: {id}")
+        logging.info(f"get RepaintTask: style: {style}, id: {id}, pixel: {pixel}")
         from repaint_task import RepaintTask
 
-        task = RepaintTask(mode, style, task_args["encodedImageBase64"], pixel)
+        task = RepaintTask(mode, style, pixel, task_args["encodedImageBase64"])
 
     elif mode == "MergeBuiltinRepaintTask":
         use_image = task_args["presetName"]
         logging.info(
-            f"get MergeBuiltinRepaintTask: style: {style}, id: {id}, presetName: {use_image}"
+            f"get MergeBuiltinRepaintTask: style: {style}, id: {id}, presetName: {use_image}, pixel: {pixel}"
         )
         from merge_task import MergeBuiltinRepaintTask
 
         task = MergeBuiltinRepaintTask(
-            mode, use_image, task_args["encodedImage1Base64"]
+            mode, use_image, pixel, task_args["encodedImage1Base64"]
         )
 
     elif mode == "MergeRepaintBothTask":
-        logging.info(f"get MergeRepaintBothTask: style: {style}, id: {id}")
+        logging.info(
+            f"get MergeRepaintBothTask: style: {style}, id: {id}, pixel: {pixel}"
+        )
         from merge_task import MergeRepaintBothTask
 
         task = MergeRepaintBothTask(
             mode,
             style,
+            pixel,
             task_args["encodedImage1Base64"],
             task_args["encodedImageBase64"],
         )
@@ -174,8 +182,6 @@ def args_to_task(task_args):
 
 
 if __name__ == "__main__":
-    encoded1 = file_to_base64("test/background.png")
-    image = base64_to_image(encoded1)
-    encoded2 = image_to_base64(image)
-    base64_to_file(encoded1, "encoded1", ".")
-    base64_to_file(encoded2, "encoded2", ".")
+    w, h = split_pixel("300*200")
+    print(w)
+    print(h)

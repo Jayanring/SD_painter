@@ -7,7 +7,7 @@ import logging
 
 class RepaintTask(object):
     def __init__(
-        self, mode, style, encoded_image, pixel_sum=util.get_repaint_pixel_sum()
+        self, mode, style, pixel_sum, encoded_image
     ):
         self._mode = mode
         self._style = style
@@ -47,7 +47,8 @@ class RepaintTask(object):
         args = config["args"]
         # cal size
         input_image = util.base64_to_image(self._encoded_image)
-        target_width, target_height = util.cal_size(self._pixel_sum, input_image)
+        # target_width, target_height = util.cal_size(self._pixel_sum, input_image)
+        target_width, target_height = util.split_pixel(self._pixel_sum)
         args["width"] = target_width
         args["height"] = target_height
 
@@ -76,5 +77,5 @@ if __name__ == "__main__":
     path = f"test/person.png"
     encoded_image = util.file_to_base64(path)
 
-    task = RepaintTask("repaint", "anime", encoded_image).rename_task()
+    task = RepaintTask("repaint", "anime", "300*300", encoded_image).rename_task()
     task.process()

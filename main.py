@@ -13,7 +13,7 @@ if __name__ == "__main__":
     # check sd_url
     requests.get(url=f"{util.sd_url()}/sdapi/v1/options").json()
 
-    logging.error("check sd_url success")
+    logging.info("check sd_url success")
     logging.info(f"get_task_url: {util.get_task_url()}")
     logging.info(f"submit_task_url: {util.submit_task_url()}")
 
@@ -48,14 +48,16 @@ if __name__ == "__main__":
                 task = util.args_to_task(task_args)
                 start_time = time.time()
                 encoded_image = task.process()
+                if encoded_image == None:
+                    encoded_image == ""
                 elapsed = time.time() - start_time
                 logging.info(f"process success, spend {elapsed} s")
 
                 submit_payload = {
                     "errorMessage": "",
-                    "fileName": f"{task._task_id}",
+                    "fileName": f"{task._task_id}" + ".png",
                     "id": f"{task._id}",
-                    "mediaType": "png",
+                    "mediaType": "image/png",
                     "resultImageBase64": encoded_image,
                 }
                 result = requests.post(util.submit_task_url(), json=submit_payload)
@@ -66,7 +68,7 @@ if __name__ == "__main__":
                     "errorMessage": f"{e}",
                     "fileName": "",
                     "id": f"{task._id}",
-                    "mediaType": "png",
+                    "mediaType": "",
                     "resultImageBase64": "",
                 }
                 result = requests.post(util.submit_task_url(), json=submit_payload)

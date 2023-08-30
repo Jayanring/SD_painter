@@ -34,13 +34,13 @@ class InpaintPersonTask(RepaintTask):
 
 
 if __name__ == "__main__":
-    path = f"scripts/merge_test/person.png"
+    path = f"test/person.png"
     encoded_image = util.file_to_base64(path)
 
     task = InpaintBackgroundTask(
-        "inpaint_background", "anime", encoded_image
+        "inpaint_background", "anime", "750*750", encoded_image
     ).rename_task()
     task.process()
 
-    task = InpaintPersonTask("inpaint_person", "anime", encoded_image).rename_task()
+    task = InpaintPersonTask("inpaint_person", "anime", "750*750", encoded_image).rename_task()
     task.process()

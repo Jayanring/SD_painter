@@ -32,6 +32,8 @@ class PresetBackgroundTask(object):
         with open(f"args/merge_args/style_map.json", "w") as file:
             json.dump(config, file, indent=4)
 
+        return None
+
 
 if __name__ == "__main__":
     path = f"test/background.png"

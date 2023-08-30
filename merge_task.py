@@ -71,11 +71,12 @@ def adjust_person_size(background: Image.Image, person: Image.Image):
 
 
 class MergeTask(object):
-    def __init__(self, mode, style, person_encoded, background_encoded=None):
+    def __init__(self, mode, style, pixel, person_encoded, background_encoded=None):
         self._mode = mode
         self._style = style
         self._person_encoded = person_encoded
         self._background_encoded = background_encoded
+        self._pixel = pixel
         self._task_id = util.calculate_md5(
             mode + style + person_encoded[:10] + str(time.time())
         )
@@ -93,13 +94,16 @@ class MergeTask(object):
             repaint_task = RepaintTask(
                 "repaint",
                 self.get_repaint_style(),
+                self._pixel,
                 encoded_image,
-                util.get_merge_background_pixel_sum(),
             )
             repaint_task._task_id = self._task_id + "_repaint_background"
         else:
+            input_image = util.base64_to_image(encoded_image)
+            target_width, target_height = util.cal_size(562500, input_image)
+            pixel_str = f"{target_width}*{target_height}"
             repaint_task = RepaintTask(
-                "repaint", self.get_repaint_style(), encoded_image
+                "repaint", self.get_repaint_style(), pixel_str, encoded_image
             )
             repaint_task._task_id = self._task_id + "_repaint_person"
         encoded_image = repaint_task.process()
@@ -183,31 +187,31 @@ if __name__ == "__main__":
     path = f"test/person.png"
     encoded_person = util.file_to_base64(path)
 
-    task = MergeBuiltinTask("merge_builtin", "xihu", encoded_person).rename_task()
-    task.process()
+    # task = MergeBuiltinTask("merge_builtin", "xihu", "750*750", encoded_person).rename_task()
+    # task.process()
 
     task = MergeBuiltinRepaintTask(
-        "merge_builtin_repaint", "xihu", encoded_person
+        "merge_builtin_repaint", "xihu", "750*750", encoded_person
     ).rename_task()
     task.process()
 
     background_path = f"test/background.png"
     encoded_background = util.file_to_base64(background_path)
 
-    task = MergeTask("merge", "", encoded_person, encoded_background).rename_task()
-    task.process()
+    # task = MergeTask("merge", "", "750*750", encoded_person, encoded_background).rename_task()
+    # task.process()
 
-    task = MergeRepaintPersonTask(
-        "merge_repaint_person", "anime", encoded_person, encoded_background
-    ).rename_task()
-    task.process()
+    # task = MergeRepaintPersonTask(
+    #     "merge_repaint_person", "anime", "750*750", encoded_person, encoded_background
+    # ).rename_task()
+    # task.process()
 
-    task = MergeRepaintBackgroundTask(
-        "merge_repaint_background", "anime", encoded_person, encoded_background
-    ).rename_task()
-    task.process()
+    # task = MergeRepaintBackgroundTask(
+    #     "merge_repaint_background", "anime", "750*750", encoded_person, encoded_background
+    # ).rename_task()
+    # task.process()
 
     task = MergeRepaintBothTask(
-        "merge_repaint_both", "anime", encoded_person, encoded_background
+        "merge_repaint_both", "anime", "750*750", encoded_person, encoded_background
     ).rename_task()
     task.process()
