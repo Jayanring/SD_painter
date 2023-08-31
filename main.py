@@ -39,7 +39,9 @@ if __name__ == "__main__":
             continue
 
         if "data" not in task_list:
-            logging.warning(f"task no data")
+            timestamp = int(time.time())
+            if timestamp % 100 == 0:
+                logging.warning(f"task data is empty")
             time.sleep(1)
             continue
 
