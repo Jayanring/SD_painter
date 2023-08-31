@@ -95,6 +95,7 @@ class MergeTask(object):
                 "repaint",
                 self.get_repaint_style(),
                 self._pixel,
+                "",
                 encoded_image,
             )
             repaint_task._task_id = self._task_id + "_repaint_background"
@@ -103,7 +104,7 @@ class MergeTask(object):
             target_width, target_height = util.cal_size(562500, input_image)
             pixel_str = f"{target_width}*{target_height}"
             repaint_task = RepaintTask(
-                "repaint", self.get_repaint_style(), pixel_str, encoded_image
+                "repaint", self.get_repaint_style(), pixel_str, "", encoded_image
             )
             repaint_task._task_id = self._task_id + "_repaint_person"
         encoded_image = repaint_task.process()
