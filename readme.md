@@ -8,6 +8,8 @@
 3. 填写配置
 
     `cp .env_template .env`
+    
+    `vim .env`
 4. 运行容器
 
     调试：`docker run -it --rm -v ./.env:/sd/.env  -v ./args:/sd/args -v ./outputs:/sd/outputs --name sd_painter jayanring/sd_painter /bin/bash`
@@ -16,6 +18,8 @@
 
     如果sd-webui运行在宿主机，还需要添加：
     `--add-host=host.docker.internal:host-gateway`
+
+    使用`host.docker.internal`表示主机IP地址
 
     调试：`docker run -it --rm --add-host=host.docker.internal:host-gateway -v ./.env:/sd/.env  -v ./args:/sd/args -v ./outputs:/sd/outputs --name sd_painter jayanring/sd_painter /bin/bash`
 

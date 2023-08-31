@@ -63,13 +63,14 @@ if __name__ == "__main__":
                 result = requests.post(util.submit_task_url(), json=submit_payload)
                 logging.info(f"submit {task._task_id}: {result.json()}\n")
             except Exception as e:
+                id = task_args["id"]
                 logging.warning(f"process failed: {e}")
                 submit_payload = {
                     "errorMessage": f"{e}",
                     "fileName": "",
-                    "id": f"{task._id}",
+                    "id": f"{id}",
                     "mediaType": "",
                     "resultImageBase64": "",
                 }
                 result = requests.post(util.submit_task_url(), json=submit_payload)
-                logging.info(f"submit {task._task_id} error: {result.json()}\n")
+                logging.info(f"submit {id} error: {result.json()}\n")
