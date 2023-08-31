@@ -124,13 +124,20 @@ def args_to_task(task_args):
     style = task_args["style"]
     pixel = task_args["pixel"]
     if mode == "RepaintTask":
-        prompt = task_args["prompts"]
-        logging.info(f"get RepaintTask: style: {style}, id: {id}, pixel: {pixel}, prompt: {prompt}")
-        from repaint_task import RepaintTask
+        logging.info(f"get RepaintTask: style: {style}, id: {id}, pixel: {pixel}")
         if "encodedImageBase64" in task_args and task_args["encodedImageBase64"] != "":
-            task = RepaintTask(mode, style, pixel, prompt, task_args["encodedImageBase64"])
+            logging.info(f"repaint with input image")
+            encodedImageBase64 = task_args["encodedImageBase64"]
         else:
-            task = RepaintTask(mode, style, pixel, prompt, "")
+            encodedImageBase64 = ""
+        if "prompts" in task_args and task_args["prompts"] != "":
+            logging.info(f"repaint with input prompts")
+            prompts = task_args["prompts"]
+        else:
+            prompts = ""
+        from repaint_task import RepaintTask
+
+        task = RepaintTask(mode, style, pixel, prompts, encodedImageBase64)
 
     elif mode == "MergeBuiltinRepaintTask":
         use_image = task_args["presetName"]

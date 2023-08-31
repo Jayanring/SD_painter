@@ -11,7 +11,6 @@ COPY u2net.onnx /root/.u2net/
 COPY main.py ./
 COPY repaint_task.py ./
 COPY merge_task.py ./
-COPY inpaint_task.py ./
 COPY preset_task.py ./
 COPY sd_api.py ./
 COPY util.py ./
