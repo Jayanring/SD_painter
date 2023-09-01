@@ -4,10 +4,8 @@ from PIL import PngImagePlugin
 
 
 def set_checkpoint(model):
-    result = requests.get(url=f"{util.sd_url()}/sdapi/v1/options").json()
-    if result["sd_model_checkpoint"] == model:
-        return
-    option_payload = {"sd_model_checkpoint": model}
+
+    option_payload = {"sd_model_checkpoint": model, "CLIP_stop_at_last_layers": 2}
     requests.post(url=f"{util.sd_url()}/sdapi/v1/options", json=option_payload)
 
 

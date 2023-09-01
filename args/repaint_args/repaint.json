@@ -15,7 +15,7 @@
                         {
                             "input_image": "",
                             "module": "lineart_realistic",
-                            "pixel_perfect": true,
+                            "processor_res": 512,
                             "model": "control_v11p_sd15_lineart [43d4be0d]",
                             "weight": 1.5,
                             "control_mode": 2
@@ -23,10 +23,104 @@
                         {
                             "input_image": "",
                             "module": "depth_leres++",
-                            "pixel_perfect": true,
+                            "processor_res": 512,
                             "model": "control_v11f1p_sd15_depth [cfd03158]",
                             "weight": 0.9,
                             "control_mode": 0
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "guochao": {
+        "checkpoint": "flat2DAnimerge_v30.safetensors [423dc55b3f]",
+        "args": {
+            "prompt": "(Masterpiece:1.2, high quality), (pixiv:1.4),Gongbi painting of the Song Dynasty, floral print, hair bun, hair ornament, hair rings, hanfu, midjourney portrait, Chinese style, <lora:chinese_style1_huaxiangrong:0.8>, <lora:chinese_style2_luhuanong:0.8>",
+            "negative_prompt": "NSFW, illustration, 3d, sepia, painting, cartoons, sketch, (worst quality:2), (low quality:2), (normal quality:2), lowres, bad anatomy, normal quality, ((monochrome)), ((grayscale)) , badhandsv4, verybadimagenegative_v1.3, easynegative",
+            "batch_size": 1,
+            "steps": 30,
+            "sampler_index": "Euler a",
+            "cfg_scale": 7,
+            "seed": -1,
+            "alwayson_scripts": {
+                "controlnet": {
+                    "args": [
+                        {
+                            "input_image": "",
+                            "module": "lineart_realistic",
+                            "processor_res": 512,
+                            "model": "control_v11p_sd15_lineart [43d4be0d]",
+                            "weight": 1,
+                            "control_mode": 2
+                        },
+                        {
+                            "input_image": "",
+                            "module": "depth_leres++",
+                            "processor_res": 512,
+                            "model": "control_v11f1p_sd15_depth [cfd03158]",
+                            "weight": 1,
+                            "control_mode": 2
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "disney": {
+        "checkpoint": "disneyPixarCartoon_v10.safetensors [732d0dd2cf]",
+        "args": {
+            "prompt": "masterpiece, best quality, high quality, (beautiful eyes:1.2), cute, bright, hands down, upper body",
+            "negative_prompt": "NSFW, (worst quality:2), (low quality:2), (normal quality:2), lowres, normal quality, (watermark:2), colorful, deepnegative, verybadimagenegative_v1.3",
+            "batch_size": 1,
+            "steps": 30,
+            "sampler_index": "Euler a",
+            "cfg_scale": 7,
+            "seed": -1,
+            "alwayson_scripts": {
+                "controlnet": {
+                    "args": [
+                        {
+                            "input_image": "",
+                            "module": "lineart_realistic",
+                            "processor_res": 512,
+                            "model": "control_v11p_sd15_lineart [43d4be0d]",
+                            "weight": 0.5,
+                            "control_mode": 2
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "oilpaint": {
+        "checkpoint": "majicmixRealistic_v6.safetensors [e4a30e4607]",
+        "args": {
+            "prompt": "masterpiece, best quality, impressionist, <lora:impress:1.2>",
+            "negative_prompt": "NSFW, (worst quality:2), (low quality:2), (normal quality:2), lowres, normal quality, (watermark:2), colorful, deepnegative, verybadimagenegative_v1.3",
+            "batch_size": 1,
+            "steps": 30,
+            "sampler_index": "DPM++ SDE Karras",
+            "cfg_scale": 8,
+            "seed": -1,
+            "alwayson_scripts": {
+                "controlnet": {
+                    "args": [
+                        {
+                            "input_image": "",
+                            "module": "lineart_realistic",
+                            "processor_res": 512,
+                            "model": "control_v11p_sd15_lineart [43d4be0d]",
+                            "weight": 1,
+                            "control_mode": 2
+                        },
+                        {
+                            "input_image": "",
+                            "module": "depth_leres++",
+                            "processor_res": 512,
+                            "model": "control_v11f1p_sd15_depth [cfd03158]",
+                            "weight": 0.5,
+                            "control_mode": 2
                         }
                     ]
                 }

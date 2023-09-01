@@ -20,7 +20,7 @@ class RepaintTask(object):
 
     # just for test
     def rename_task(self):
-        self._task_id += "_" + self._mode
+        self._task_id += "_" + self._mode + "_" + self._style
         return self
 
     def get_repaint_config(self):
@@ -90,8 +90,11 @@ if __name__ == "__main__":
     task = RepaintTask("repaint", "anime", "750*750", "", encoded_image).rename_task()
     task.process()
 
-    task = RepaintTask("repaint", "anime", "750*750", "cat:1.5", "").rename_task()
+    task = RepaintTask("repaint", "guochao", "750*750", "", encoded_image).rename_task()
     task.process()
 
-    task = RepaintTask("repaint", "anime", "750*750", "red clothes", encoded_image).rename_task()
+    task = RepaintTask("repaint", "disney", "750*750", "", encoded_image).rename_task()
+    task.process()
+
+    task = RepaintTask("repaint", "oilpaint", "750*750", "", encoded_image).rename_task()
     task.process()

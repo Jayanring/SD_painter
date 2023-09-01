@@ -174,7 +174,7 @@ def args_to_task(task_args):
     else:
         raise ValueError(f"not support mode: {mode}")
 
-    task._task_id = id + "_" + mode
+    task._task_id = id + "_" + mode + "_" + style
     task._id = id
 
     # save raw image
