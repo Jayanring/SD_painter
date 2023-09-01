@@ -165,11 +165,11 @@ def args_to_task(task_args):
         )
 
     elif mode == "PresetBackgroundTask":
-        logging.info(f"get PresetBackgroundTask: style: {style}, id: {id}")
+        logging.info(f"get PresetBackgroundTask: style: {style}, id: {id}, pixel: {pixel}")
         from preset_task import PresetBackgroundTask
 
         task = PresetBackgroundTask(
-            mode, style, task_args["encodedImageBase64"], task_args["presetName"]
+            mode, style, pixel, task_args["encodedImageBase64"], task_args["presetName"]
         )
     else:
         raise ValueError(f"not support mode: {mode}")

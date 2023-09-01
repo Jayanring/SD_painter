@@ -2,7 +2,6 @@ from repaint_task import RepaintTask
 import json
 import time
 import util
-import os
 from PIL import Image
 
 # merge two images, one provides person, one provides background
